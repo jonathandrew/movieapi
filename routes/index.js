@@ -4,8 +4,11 @@ const Movies = require("../models/Movies");
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
-  res.render("index", { title: "Express" });
+  Movies.find({}).then(movies => {
+    res.render("index", { movies: movies });
+  });
 });
+
 router.post("/", (req, res) => {
   const {
     title,
@@ -40,6 +43,7 @@ router.post("/", (req, res) => {
       newMovie.release_year = release_year;
       newMovie.genre = genre;
       newMovie.director = director;
+      newMovie.box_office = box_office;
       newMovie
         .save()
         .then(movie => {
