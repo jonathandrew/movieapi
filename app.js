@@ -19,6 +19,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+mongoose
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+  })
+  .then(() => {
+    console.log("MongoDB Connected");
+  })
+  .catch(err => {
+    console.log(`Mongo Error: ${err}`);
+  });
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
