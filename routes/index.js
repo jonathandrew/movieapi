@@ -59,5 +59,30 @@ router.post("/", (req, res) => {
       res.status(500).json({ message: "error somewhere", err });
     });
 });
+router.put("/:title", (req, res) => {
+  Movies.findOne({ title: req.params.title })
+    .then(title => {
+      if (title) {
+        if (req.body.title) {
+          title.title = req.body.title;
+        }
+        title
+          .save()
+          .then(title => {
+            return res.status(200).json({ message: "title changed", title });
+          })
+          .catch(err => {
+            return res
+              .status(400)
+              .json({ message: "title did not change", err });
+          });
+      }
+    })
+    .catch(err => {
+      return res
+        .status(500)
+        .json({ message: "could not find title at all", err });
+    });
+});
 
 module.exports = router;
