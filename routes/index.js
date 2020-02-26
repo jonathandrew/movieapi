@@ -84,5 +84,20 @@ router.put("/:title", (req, res) => {
         .json({ message: "could not find title at all", err });
     });
 });
-
+router.delete("/:title", (req, res) => {
+  Movies.findOneAndDelete({ title: req.params.title })
+    .then(movie => {
+      console.log(movie);
+      if (movie) {
+        return res.status(200).json({ message: "movie is deleted", movie });
+      } else {
+        return res.status(400).json({ message: "no movie found" });
+      }
+    })
+    .catch(err => {
+      return res
+        .status(400)
+        .json({ message: "movie was not deleted properly", err });
+    });
+});
 module.exports = router;
